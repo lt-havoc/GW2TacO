@@ -27,7 +27,6 @@
 		<ApplicationType Condition="'$(ApplicationType)' == ''"></ApplicationType>
 	</PropertyGroup>
 
-	<!-- Sätt release-specifika variabler -->
 	<PropertyGroup Condition="( $(Configuration.ToLower().IndexOf('release')) &gt; -1 )">
 		<_release>true</_release>
 		<_releasex86 Condition="$(_x86)">true</_releasex86>
@@ -55,22 +54,37 @@
 		<RuntimeIdentifiers Condition="'$(RuntimeIdentifiers)' == ''">win-x86;win-x64;win-arm;win-arm64</RuntimeIdentifiers>
 	</PropertyGroup>
 
+	<PropertyGroup Label="Vcpkg">
+		<VcpkgEnableManifest>true</VcpkgEnableManifest>
+	</PropertyGroup>
+  
+  <PropertyGroup Label="Vcpkg" Condition="'$(_release)'">
+    <VcpkgUseStatic>true</VcpkgUseStatic>
+    <VcpkgUseMD>false</VcpkgUseMD>
+  </PropertyGroup>
+  
+  <PropertyGroup Label="Vcpkg" Condition="'$(_debug)'">
+    <VcpkgUseStatic>false</VcpkgUseStatic>
+    <VcpkgUseMD>true</VcpkgUseMD>
+  </PropertyGroup>
+
+
 	<ItemDefinitionGroup Condition=" '$(ApplicationType)' == ''">
 		<BuildLog>
 			<Path>$(IntDir)$(MSBuildProjectName).log</Path>
 		</BuildLog>
+
 		<ClCompile>
 			<DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
 			<FloatingPointExceptions>false</FloatingPointExceptions>
 			<FloatingPointModel>Fast</FloatingPointModel>
 			<MinimalRebuild>false</MinimalRebuild>
 			<MultiProcessorCompilation>true</MultiProcessorCompilation>
-			<PrecompiledHeader>Use</PrecompiledHeader>
-			<PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
 			<ProgramDataBaseFileName>$(OutDir)$(TargetName).pdb</ProgramDataBaseFileName>
 			<SupportJustMyCode>false</SupportJustMyCode>
 			<WarningLevel>Level4</WarningLevel>
 		</ClCompile>
+
 		<ClCompile Condition="$(_release)">
 			<BufferSecurityCheck>false</BufferSecurityCheck>
 			<FavorSizeOrSpeed>Size</FavorSizeOrSpeed>
@@ -79,7 +93,7 @@
 			<IntrinsicFunctions>true</IntrinsicFunctions>
 			<OmitFramePointers>true</OmitFramePointers>
 			<Optimization>Full</Optimization>
-			<RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+			<RuntimeLibrary>MultiThreaded</RuntimeLibrary>
 			<StringPooling>true</StringPooling>
 		</ClCompile>
 		<Link Condition="$(_release)">
@@ -88,6 +102,7 @@
 			<LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
 			<OptimizeReferences>true</OptimizeReferences>
 		</Link>
+
 		<Lib Condition="$(_release)">
 			<GenerateDebugInformation>false</GenerateDebugInformation>
 			<LinkTimeCodeGeneration>true</LinkTimeCodeGeneration>

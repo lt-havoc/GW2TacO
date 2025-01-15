@@ -1,5 +1,6 @@
 #pragma once
-#include "../UtilLib/RapidXML/rapidxml.hpp"
+
+#include <rapidxml/rapidxml.hpp>
 
 #include "../BaseLib/BaseLib.h"
 

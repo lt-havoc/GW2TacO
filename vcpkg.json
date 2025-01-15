@@ -2,6 +2,14 @@
   "dependencies": [
     {
       "name": "openssl",
+      "features": ["ssl3"]
+    },
+    {
+      "name": "stb",
+      "features": []
+    },
+    {
+      "name": "rapidxml",
       "features": []
     }
   ]

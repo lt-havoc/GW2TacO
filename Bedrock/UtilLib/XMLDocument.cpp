@@ -1,5 +1,6 @@
-#include "../UtilLib/RapidXML/rapidxml.hpp"
-#include "../UtilLib/RapidXML/rapidxml_print.hpp"
+#include <rapidxml/rapidxml.hpp>
+#include <rapidxml/rapidxml_print.hpp>
+
 
 #include "XMLDocument.h"
 

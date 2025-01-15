@@ -18,7 +18,7 @@ TS32 CSocketSSL::Connect( const CString &Server, const TU32 Port )
   SSL_library_init();
   SSL_load_error_strings();
 
-  SSL_METHOD * meth = SSLv3_method();
+  const SSL_METHOD * meth = TLS_method();
   ctx = SSL_CTX_new( meth );
 
   ssl = SSL_new( (SSL_CTX*)ctx );

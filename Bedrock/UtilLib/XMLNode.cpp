@@ -1,4 +1,4 @@
-#include "../UtilLib/RapidXML/rapidxml.hpp"
+#include <rapidxml/rapidxml.hpp>
 
 #include "XMLNode.h"
 #include "XMLDocument.h"
