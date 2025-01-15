@@ -2,7 +2,6 @@
 #include "GW2API.h"
 #include "OverlayConfig.h"
 #include "Bedrock/UtilLib/jsonxx.h"
-#include "ThirdParty/BugSplat/inc/BugSplat.h"
 
 using namespace jsonxx;
 
@@ -22,7 +21,6 @@ void GW2MapTimer::OnDraw( CWBDrawAPI* API )
       beingFetched = true;
       fetchThread = std::thread( [this, key]()
                                  {
-                                   SetPerThreadCRTExceptionBehavior();
                                    Object json;
 
                                    CString lastDungeonStatus = CString( "{\"worldbosses\":" ) + key->QueryAPI( "v2/account/worldbosses" ) + "}";

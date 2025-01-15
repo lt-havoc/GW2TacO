@@ -18,7 +18,6 @@
 #include "TrailLogger.h"
 #include "Language.h"
 #include "BuildCount.h"
-#include "ThirdParty/BugSplat/inc/BugSplat.h"
 #include "MarkerPack.h"
 using namespace jsonxx;
 
@@ -2004,7 +2003,6 @@ void GW2TacO::CheckItemPickup()
     pickupsBeingFetched = true;
     pickupFetcherThread = std::thread( [this, key]()
                                        {
-                                         SetPerThreadCRTExceptionBehavior();
                                          CString query = key->QueryAPI( "v2/commerce/delivery" );
 
                                          Object json;

@@ -8,7 +8,6 @@
 #include "Language.h"
 #include "GW2API.h"
 #include "OverlayApplication.h"
-#include "ThirdParty/BugSplat/inc/BugSplat.h"
 #include <unordered_map>
 #include "MarkerPack.h"
 #include "Bedrock/UtilLib/jsonxx.h"

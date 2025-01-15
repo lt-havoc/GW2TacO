@@ -27,18 +27,15 @@
 #include "WvW.h"
 #include <TlHelp32.h>
 #include <imm.h>
-#include "ThirdParty/BugSplat/inc/BugSplat.h"
 #include "MarkerPack.h"
 #include "MarkerEditor.h"
 
 #define MINIZ_HEADER_FILE_ONLY
 #include "Bedrock/UtilLib/miniz.c"
 
-#pragma comment(lib,"ThirdParty/BugSplat/lib/BugSplat.lib")
 #pragma comment(lib,"Dwmapi.lib")
 #pragma comment(lib,"Imm32.lib")
 
-MiniDmpSender* bugSplat = nullptr;
 CLoggerOutput_RingBuffer* ringbufferLog = nullptr;
 
 CWBApplication* App = NULL;
@@ -122,25 +119,8 @@ LONG WINAPI CrashOverride( struct _EXCEPTION_POINTERS* excpInfo )
 {
   if ( IsDebuggerPresent() ) return EXCEPTION_CONTINUE_SEARCH;
 
-#ifndef _DEBUG
-  bool bs = !Config::HasValue( "SendCrashDump" ) || Config::GetValue( "SendCrashDump" );
-  if ( bugSplat && bs )
-  {
-    if ( ringbufferLog )
-    {
-      ringbufferLog->Dump( "CrashLog.log" );
-      bugSplat->sendAdditionalFile( L"CrashLog.log" );
-    }
-    bugSplat->unhandledExceptionHandler( excpInfo );
-    MessageBox( NULL, _T( "TacO has crashed :(\nCrash has been reported." ), _T( "Crash" ), MB_ICONERROR );
-    return EXCEPTION_EXECUTE_HANDLER;
-  }
-  else
-#endif
-  {
     LONG res = baseCrashTracker( excpInfo );// FullDumpCrashTracker( excpInfo );// baseCrashTracker( excpInfo );
     return res;
-  }
 }
 
 DWORD GetProcessIntegrityLevel( HANDLE hProcess )
@@ -399,20 +379,6 @@ BOOL __stdcall GW2WindowFromPIDFunction( HWND hWnd, LPARAM a2 )
       gw2WindowFromPid = hWnd;
   }
   return 1;
-}
-
-void InitCrashTracking()
-{
-  extern CString TacOBuild;
-  InitializeCrashTracker( CString( "GW2 TacO " ) + TacOBuild, CrashOverride );
-
-  std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
-  std::wstring wide = converter.from_bytes( TacOBuild.GetPointer() );
-
-  bugSplat = new MiniDmpSender( L"GW2TacO", L"GW2TacO", wide.data(), NULL, MDSF_NONINTERACTIVE | MDSF_USEGUARDMEMORY | MDSF_LOGFILE | MDSF_PREVENTHIJACKING | MDSF_CUSTOMEXCEPTIONFILTER );
-  SetGlobalCRTExceptionBehavior();
-  SetPerThreadCRTExceptionBehavior();  // This call needed in each thread of your app
-  bugSplat->setGuardByteBufferSize( 20 * 1024 * 1024 );
 }
 
 void InitLogging()
@@ -704,7 +670,6 @@ INT WINAPI WinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 {
   ImmDisableIME( -1 );
 
-  InitCrashTracking();
   InitLogging();
 
   Config::Load();
@@ -880,7 +845,6 @@ INT WINAPI WinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 
   //cleanup
   SAFEDELETE( App );
-  SAFEDELETE( bugSplat );
-
+  
   return true;
 }

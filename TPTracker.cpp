@@ -3,7 +3,6 @@
 #include "OverlayConfig.h"
 #include "Language.h"
 #include "Bedrock/UtilLib/PNGDecompressor.h"
-#include "ThirdParty/BugSplat/inc/BugSplat.h"
 
 using namespace jsonxx;
 
@@ -77,7 +76,6 @@ void TPTracker::OnDraw( CWBDrawAPI* API )
     beingFetched = true;
     fetchThread = std::thread( [this, key]()
                                {
-                                 SetPerThreadCRTExceptionBehavior();
                                  CString qbuys = CString( "{\"buys\":" ) + key->QueryAPI( "v2/commerce/transactions/current/buys" );
                                  CString qsells = CString( "{\"sells\":" ) + key->QueryAPI( "v2/commerce/transactions/current/sells" );
 

@@ -3,7 +3,6 @@
 #include "OverlayConfig.h"
 #include "Bedrock/UtilLib/jsonxx.h"
 #include "Language.h"
-#include "ThirdParty/BugSplat/inc/BugSplat.h"
 
 using namespace jsonxx;
 
@@ -42,7 +41,6 @@ void RaidProgress::OnDraw( CWBDrawAPI* API )
     beingFetched = true;
     fetchThread = std::thread( [this, key]()
                                {
-                                 SetPerThreadCRTExceptionBehavior();
                                  if ( !hasFullRaidInfo )
                                  {
                                    Object json;

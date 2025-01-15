@@ -1,6 +1,5 @@
 #include "Achievements.h"
 #include "GW2API.h"
-#include "ThirdParty/BugSplat/inc/BugSplat.h"
 
 #include "Bedrock/UtilLib/jsonxx.h"
 using namespace jsonxx;
@@ -24,7 +23,6 @@ void Achievements::FetchAchievements()
     beingFetched = true;
     fetchThread = std::thread( [key]()
                                {
-                                 SetPerThreadCRTExceptionBehavior();
                                  CheckFestivalActive();
                                  CString dungeonFrequenterStatus = CString( "{\"achievements\":" ) + key->QueryAPI( "v2/account/achievements" ) + "}";
                                  Object json;

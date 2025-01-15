@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+
+	<PropertyGroup>
+		<_release>false</_release>
+		<_releasex86>false</_releasex86>
+		<_releasex86>false</_releasex86>
+		<_releasex64>false</_releasex64>
+		<_releaseany>false</_releaseany>
+		<_debug>false</_debug>
+		<_debugx86>false</_debugx86>
+		<_debugx64>false</_debugx64>
+		<_debugany>false</_debugany>
+
+		<_x64>false</_x64>
+		<_x64 Condition="'$(Platform)'== 'x64'">true</_x64>
+
+		<_x86>false</_x86>
+		<_x86 Condition="'$(Platform)'== 'x86'">true</_x86>
+		<_x86 Condition="'$(Platform)'== 'win32'">true</_x86>
+		
+		<_arch>anycpu</_arch>
+		<_arch Condition="'$(Platform)'== 'x64'">x64</_arch>
+		<_arch Condition="'$(Platform)'== 'x86'">x86</_arch>
+		<_arch Condition="'$(Platform)'== 'win32'">x86</_arch>		
+
+		<ApplicationType Condition="'$(ApplicationType)' == ''"></ApplicationType>
+	</PropertyGroup>
+
+	<!-- Sätt release-specifika variabler -->
+	<PropertyGroup Condition="( $(Configuration.ToLower().IndexOf('release')) &gt; -1 )">
+		<_release>true</_release>
+		<_releasex86 Condition="$(_x86)">true</_releasex86>
+		<_releasex64 Condition="$(_x64)">true</_releasex64>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="( $(Configuration.ToLower().IndexOf('debug')) &gt; -1 )">
+		<_debug>true</_debug>
+		<_debugx86 Condition="$(_x86)">true</_debugx86>
+		<_debugx64 Condition="$(_x64)">true</_debugx64>
+	</PropertyGroup>
+
+	<PropertyGroup Label="Output paths">
+		<IntDir>$(SolutionDir)build\$(MSBuildProjectName)\$(_arch)\$(Configuration)\</IntDir>
+		<OutDir>$(SolutionDir)artifacts\$(_arch)\$(Configuration)\</OutDir>
+		<MSBuildProjectExtensionsPath>$(SolutionDir)build\$(MSBuildProjectName)\$(_arch)\$(Configuration)\obj</MSBuildProjectExtensionsPath>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectCapability Include="PackageReferences" />
+	</ItemGroup>
+
+	<PropertyGroup>
+		<NuGetTargetMoniker Condition="'$(NuGetTargetMoniker)' == ''">native,Version=v0.0</NuGetTargetMoniker>
+		<RuntimeIdentifiers Condition="'$(RuntimeIdentifiers)' == ''">win-x86;win-x64;win-arm;win-arm64</RuntimeIdentifiers>
+	</PropertyGroup>
+
+	<ItemDefinitionGroup Condition=" '$(ApplicationType)' == ''">
+		<BuildLog>
+			<Path>$(IntDir)$(MSBuildProjectName).log</Path>
+		</BuildLog>
+		<ClCompile>
+			<DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+			<FloatingPointExceptions>false</FloatingPointExceptions>
+			<FloatingPointModel>Fast</FloatingPointModel>
+			<MinimalRebuild>false</MinimalRebuild>
+			<MultiProcessorCompilation>true</MultiProcessorCompilation>
+			<PrecompiledHeader>Use</PrecompiledHeader>
+			<PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+			<ProgramDataBaseFileName>$(OutDir)$(TargetName).pdb</ProgramDataBaseFileName>
+			<SupportJustMyCode>false</SupportJustMyCode>
+			<WarningLevel>Level4</WarningLevel>
+		</ClCompile>
+		<ClCompile Condition="$(_release)">
+			<BufferSecurityCheck>false</BufferSecurityCheck>
+			<FavorSizeOrSpeed>Size</FavorSizeOrSpeed>
+			<FunctionLevelLinking>true</FunctionLevelLinking>
+			<InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+			<IntrinsicFunctions>true</IntrinsicFunctions>
+			<OmitFramePointers>true</OmitFramePointers>
+			<Optimization>Full</Optimization>
+			<RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+			<StringPooling>true</StringPooling>
+		</ClCompile>
+		<Link Condition="$(_release)">
+			<EnableCOMDATFolding>true</EnableCOMDATFolding>
+			<GenerateDebugInformation>false</GenerateDebugInformation>
+			<LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
+			<OptimizeReferences>true</OptimizeReferences>
+		</Link>
+		<Lib Condition="$(_release)">
+			<GenerateDebugInformation>false</GenerateDebugInformation>
+			<LinkTimeCodeGeneration>true</LinkTimeCodeGeneration>
+		</Lib>
+
+		<ClCompile Condition="$(_debug)">
+			<Optimization>Disabled</Optimization>
+			<RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+			<SDLCheck>true</SDLCheck>
+		</ClCompile>
+
+		<Link Condition="$(_debug)">
+			<GenerateDebugInformation>true</GenerateDebugInformation>
+		</Link>
+
+		<Lib Condition="$(_debug)">
+			<GenerateDebugInformation>true</GenerateDebugInformation>
+		</Lib>
+
+		<ClCompile Condition="$(_releasex86)">
+			<PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+			<EnableEnhancedInstructionSet Condition="'$(DriverType)'==''">StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+		</ClCompile>
+		<ClCompile Condition="$(_debugx86)">
+			<PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+			<EnableEnhancedInstructionSet Condition="'$(DriverType)'==''">StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+		</ClCompile>
+		<ClCompile Condition="$(_releasex64)">
+			<PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+		</ClCompile>
+		<ClCompile Condition="$(_debugx64)">
+			<PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_DEBUG;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+		</ClCompile>
+	</ItemDefinitionGroup>
+
+</Project>
