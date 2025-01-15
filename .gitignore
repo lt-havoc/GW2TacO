@@ -1,4 +1,5 @@
 syntax: glob
+vcpkg_installed/
 *.log
 *.suo
 *.*old*

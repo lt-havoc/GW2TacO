@@ -1,8 +1,6 @@
 #include "SocketSSL.h"
-#include "ExternalLibraries/openssl/include/openssl/ssl.h"
-#include "ExternalLibraries/openssl/include/openssl/bio.h"
-#pragma comment(lib,"ExternalLibraries/openssl/lib/libeay32.lib")
-#pragma comment(lib,"ExternalLibraries/openssl/lib/ssleay32.lib")
+#include <openssl/ssl.h>
+#include <openssl/bio.h>
 
 CSocketSSL::CSocketSSL( void )
 {

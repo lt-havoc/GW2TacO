@@ -1,0 +1,30 @@
+* text eol=auto
+
+*.bmp filter=lfs diff=lfs merge=lfs -text
+*.cer filter=lfs diff=lfs merge=lfs -text
+*.der filter=lfs diff=lfs merge=lfs -text
+*.dll filter=lfs diff=lfs merge=lfs -text
+*.exe filter=lfs diff=lfs merge=lfs -text
+*.gif filter=lfs diff=lfs merge=lfs -text
+*.ico filter=lfs diff=lfs merge=lfs -text
+*.jpeg filter=lfs diff=lfs merge=lfs -text
+*.jpg filter=lfs diff=lfs merge=lfs -text
+*.lib filter=lfs diff=lfs merge=lfs -text
+*.pdf filter=lfs diff=lfs merge=lfs -text
+*.pem filter=lfs diff=lfs merge=lfs -text
+*.pfx filter=lfs diff=lfs merge=lfs -text
+*.png filter=lfs diff=lfs merge=lfs -text
+*.pnga filter=lfs diff=lfs merge=lfs -text
+*.psd filter=lfs diff=lfs merge=lfs -text
+*.snk filter=lfs diff=lfs merge=lfs -text
+*.sys filter=lfs diff=lfs merge=lfs -text
+
+# windows eol (cr/lf)
+*.cmd text eol=crlf
+*.sln text eol=crlf
+*.vcxproj text eol=crlf
+*.csproj text eol=crlf
+*.wixproj text eol=crlf
+
+# unix eol (lf)
+*.sh  text eol=lf
